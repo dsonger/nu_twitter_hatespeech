@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<title>Twitter Hate Speech | AI Project</title>
+	
+    <!-- mobile viewport settings -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> <!-- user-scalable=no is for native feel (prevents zooming) -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	
+    <!-- fonts -->
+    <!-- LINK TO FONTS HERE IF NEEDED. DELETE THIS LINE WHEN YOU ADD THE LINK. -->
+
+    <!-- stylesheets -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+	
+	
+</head>
+<body id="body" class="">
+	
+	
+	<!-- ===== HEADER ===== -->
+	<div class='header-container lead bg-info text-white text-center pt-2 pb-2'>
+		<div class='d-inline-block'>
+			<strong>Hi there</strong>
+		</div>
+		<div class='d-inline-block position-absolute' style='right:15px'>
+			<a href="javascript:toggle_overlay('main-container', 'hide-icon', 'show-icon')" id='hide-icon' class='text-white' style='text-decoration:none'>&times;</a>
+			<a href="javascript:toggle_overlay('main-container', 'hide-icon', 'show-icon')" id='show-icon' class='text-white' style='text-decoration:none; display:none'>&Hat;</a>
+		</div>
+	</div> <!-- close header-container -->
+	
+	
+	<!-- ===== MAIN CONTENT ===== -->
+	<div id='main-container' class="container-fluid main-container">
+		
+		<div class='row'>
+			<div class='col'>
+				
+				<!-- <div class='mt-2'>
+					<h1 class='display-4'>Hi there</h1>
+				</div> -->
+				
+				<div class='lead mt-3 mb-3'>This tweet triggered our system, meaning it may contain a <a href='https://en.wikipedia.org/wiki/Hate_speech' target='_blank'>hateful</a> view. We know you like to keep an open mind and be well-read on the issues, so we did a Google search for a range of articles on this topic.</div>
+				
+				<div class='lead mb-4 weight-500'>
+					<strong>Would you like to see what we found?</strong>
+				</div>
+				
+				<div>
+					<a href='https://news.google.com' target='_blank' class='btn btn-lg btn-block btn-outline-success'>Yes, let's go!</a>
+				</div>
+				
+			</div> <!-- close col -->
+		</div> <!-- close row -->
+		
+	</div> <!-- close main-container -->
+	
+	
+	<!-- ===== SCRIPTS ===== -->
+	<script>
+		// shows/hides an element and changes the icon clicked by the user to show/hide the element
+		function toggle_overlay(overlay_id, hide_icon_id, show_icon_id) {
+			var overlay = document.getElementById(overlay_id);
+			var hide_icon = document.getElementById(hide_icon_id);
+			var show_icon = document.getElementById(show_icon_id);
+
+			if (overlay.style.display == "none") {
+				overlay.style.display = "block";
+				hide_icon.style.display = "inline";
+				show_icon.style.display = "none";
+			}
+			else {
+				overlay.style.display = "none";
+				hide_icon.style.display = "none";
+				show_icon.style.display = "inline";
+			}  	
+		}
+	</script>
+
+</body>
+</html>
