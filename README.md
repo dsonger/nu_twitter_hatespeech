@@ -37,8 +37,8 @@ Currently no bugs!
 
 
 # Branches
-master: The most stable and furthest behind. Don't commit code here without clearing it with the team!
-dev: Further ahead than master. Code passes through dev before it goes to master. Branch off of dev to a branch called <YOUR NAME>, make your changes, commit, and push to github for the team to review before merging to dev.
+* master: The most stable and furthest behind. Don't commit code here without clearing it with the team!
+* dev: Further ahead than master. Code passes through dev before it goes to master. Branch off of dev to a branch called <YOUR NAME>, make your changes, commit, and push to github for the team to review before merging to dev.
 
 
 # Deployment
