@@ -1,0 +1,10 @@
+<div class='header-container bg-info text-white text-center text-big weight-300 pt-10px pb-10px'><div class=''>OPEN Detector</div></div><div id='hatespeech-extension-content-container' class='hatespeech-extension-content-container pl-15px pr-15px pt-15px pb-15px' style='display:block'><div class='mb-15px'>Hi there. This tweet triggered our system, meaning it may contain a <a class='a' href='https://en.wikipedia.org/wiki/Hate_speech' target='_blank'>hateful</a> view. We know you like to keep an open mind and be well-read on the issues, so we did a Google search for a range of articles on this topic.</div><div class='weight-500 mb-15px'>Would you like to see what we found?</div><div class=''><a href='https://google.com/search?q=${query_string}' target='_blank' class='bttn bttn-lg bttn-block bttn-outline-success'>Yes, let's go!</a></div></div>
+
+		<div class='inline-block header-icon-container'>
+			<a href=\"javascript:toggle_overlay('hatespeech-extension-content-container', 'hide-icon', 'show-icon')\" id='hide-icon' class='text-white' style='text-decoration:none'>&times;</a>
+			<a href=\"javascript:toggle_overlay('hatespeech-extension-content-container', 'hide-icon', 'show-icon')\" id='show-icon' class='text-white' style='text-decoration:none; display:none'>&Hat;</a>
+		</div>
+		
+		<script>
+			function toggle_overlay(overlay_id, hide_icon_id, show_icon_id) {var overlay = document.getElementById(overlay_id);var hide_icon = document.getElementById(hide_icon_id);var show_icon = document.getElementById(show_icon_id);if (overlay.style.display == 'none'){overlay.style.display = 'block';hide_icon.style.display = 'inline';show_icon.style.display = 'none';}else{overlay.style.display = 'none';hide_icon.style.display = 'none';show_icon.style.display = 'inline';}}
+		</script>
