@@ -24,9 +24,9 @@ server.py [-p PORT_NUMBER] [-s]
 optional arguments:
 
 ```
--p --port-number  				: Port number to be used, by default uses 8080
--s --serve-page	PORT_NUMBER  	: By default returns "403 Forbidden" on GET
-								  methods.  If this is argument is set, will
-								  serve a simple html  page to interact with
-								  server.
+-p --port-number : Port number to be used, by default uses 8080
+-s --serve-page	PORT_NUMBER : By default returns "403 Forbidden" on GET
+	methods.  If this is argument is set, will
+	serve a simple html  page to interact with
+	server.
 ```
