@@ -9,11 +9,15 @@ function makeRequest(){
     $.ajax({
         url: window.location.href,
         type: "POST",
-        data: {tweet: $('textarea#tweetText').val()},
+        data: {tweet_id: $('textarea#tweetText').val()},
         dataType: "json",
         success: function(data) {
             <!-- Test for malformed server response -->
-            $('#responseDiv').html("PREDICTION = " + data.prediction);
+			responseText = "PREDICTION = " + data.prediction
+			if (data.news_url) {
+				responseText += "<br>URL = " + data.news_url
+			}
+            $('#responseDiv').html(responseText);
         },
 		error: function(xhr, ajaxOptions, thrownError) {
             $('#responseDiv').html(xhr.status + "<br>" + ajaxOptions + "<br>" + thrownError);
@@ -22,7 +26,7 @@ function makeRequest(){
 </script>
 </head>
 <body>
-	<textarea rows="4" cols="50" id="tweetText">Type tweet text to be predicted here...</textarea>
+	<textarea rows="2" cols="50" id="tweetText">Type tweet ID to be predicted here...</textarea>
 	<p>
 		<button type="button" id="requestButton" onclick="makeRequest();">Request prediction</button>
 	</p>
