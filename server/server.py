@@ -3,6 +3,7 @@ import socket
 import argparse
 import functools
 import json
+import os
 
 from urllib.parse import parse_qs
 from gevent.pywsgi import WSGIServer
@@ -15,9 +16,10 @@ from watson_developer_cloud import NaturalLanguageUnderstandingV1
 import watson_developer_cloud.natural_language_understanding.features.v1 as Features
 
 DEFAULT_PORT_NUMBER = 8080
+HEADER = [("Content-Type", "text/html; charset=utf-8"), ("Access-Control-Allow-Origin", "*")]
 
 def error_response(start_response, status_code):
-    start_response(status_code, [("Content-Type", "text/html; charset=utf-8")])
+    start_response(status_code, HEADER)
     return [bytes('<h1>%s</h1>' % status_code, "utf-8")]
 
 def get_twitter_api(app_key, app_secret):
@@ -57,7 +59,7 @@ def application(env, start_response, classifier = None, serve_page = False,
     # the JS uses POST, so if it isn't POST, either return default page or 403 status.
     if env["REQUEST_METHOD"] != "POST":
         if serve_page:
-            start_response("200 OK", [("Content-Type", "text/html; charset=utf-8")])
+            start_response("200 OK", HEADER)
             return [response_page]
         else:
             return error_response(start_response, "403 Forbidden")
@@ -89,7 +91,7 @@ def application(env, start_response, classifier = None, serve_page = False,
     print("\ntweet:\n", tweet_data)
     print("\nresponse = ", response)
 
-    start_response("200 OK", [("Content-Type", "text/html; charset=utf-8")])
+    start_response("200 OK", HEADER)
     return [bytes(response, "utf-8")]
 
 def run_server():
@@ -131,7 +133,7 @@ def run_server():
     host = socket.gethostbyname(socket.gethostname())
     address = host, port_number
     app = functools.partial(application, classifier = classifier, serve_page = serve_page, response_page = response_page, tweet_api = tweet_api, ibm_api = ibm_api)
-    server = WSGIServer(address, app, keyfile='host.key', certfile='host.crt')
+    server = WSGIServer(address, app, keyfile = os.path.join(os.getcwd(), "host.key"), certfile = os.path.join(os.getcwd(), "host.cert"))
     server.backlog = 256
     print('\n########################################\n')
     print('Serving on https://%s:%s' % (host, port_number))

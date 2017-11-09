@@ -3,6 +3,7 @@ function makeRequest(tweet_id){
     $.ajax({
         url: "https://192.168.56.1:8080",
         type: "POST",
+		crossDomain: true,
         data: {tweet_id: tweet_id},
         dataType: "json",
         success: function(data) {
