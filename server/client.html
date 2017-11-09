@@ -1,0 +1,37 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+function makeRequest(){
+	// loading animation
+	$('#responseDiv').html("loading...");
+	// make request
+    $.ajax({
+        url: window.location.href,
+        type: "POST",
+        data: {tweet_id: $('textarea#tweetText').val()},
+        dataType: "json",
+        success: function(data) {
+            <!-- Test for malformed server response -->
+			responseText = "PREDICTION = " + data.prediction
+			if (data.news_url) {
+				responseText += "<br>URL = " + data.news_url
+			}
+            $('#responseDiv').html(responseText);
+        },
+		error: function(xhr, ajaxOptions, thrownError) {
+            $('#responseDiv').html(xhr.status + "<br>" + ajaxOptions + "<br>" + thrownError);
+        }});
+}
+</script>
+</head>
+<body>
+	<textarea rows="2" cols="50" id="tweetText">Type tweet ID to be predicted here...</textarea>
+	<p>
+		<button type="button" id="requestButton" onclick="makeRequest();">Request prediction</button>
+	</p>
+	<p>
+		<div id="responseDiv"></div>
+	</p>
+</body>
+</html>
