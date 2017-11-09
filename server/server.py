@@ -2,12 +2,15 @@ import sys
 import socket
 import argparse
 import functools
+import json
 
 from urllib.parse import parse_qs
 from gevent.pywsgi import WSGIServer
 from lstm_classifier import TwitterHateClassifier
 from twython import Twython
 from twython.exceptions import TwythonError
+from watson_developer_cloud import NaturalLanguageUnderstandingV1
+import watson_developer_cloud.natural_language_understanding.features.v1 as Features
 
 DEFAULT_PORT_NUMBER = 8080
 
@@ -15,7 +18,7 @@ def error_response(start_response, status_code):
     start_response(status_code, [("Content-Type", "text/html; charset=utf-8")])
     return [bytes('<h1>%s</h1>' % status_code, "utf-8")]
 
-def get_twitter_crawler(app_key, app_secret):
+def get_twitter_api(app_key, app_secret):
     app_key = 'inAzbLHc9OGYy2TJAyzvv8kVy'
     app_secret = 'XWv544eJo1IFdQZvNrEazM6tknDCJnsHxprlLsC1vEH3iKMEnX'
 
@@ -23,8 +26,30 @@ def get_twitter_crawler(app_key, app_secret):
     access_token = twitter.obtain_access_token()
     return Twython(app_key, access_token=access_token)
     
+def get_ibm_api(username, passsword):
+    return NaturalLanguageUnderstandingV1(
+        username="002e5382-7ca8-45fd-9cf3-7d31cba37479",
+        password="2gNm8tNui0Kz",
+        version="2017-02-27")
+
+def create_news_url(ibm_api, tweet_text):
+    response = ibm_api.analyze(
+      text = tweet_text,
+      features=[
+        Features.Categories()
+      ]
+    )
+    print(response)
+    category_label = response["categories"][0]["label"]
+    print(category_label)
+    query = (" ".join(category_label.split("/")[1:])).replace(" ", "%20")
+    print(query)
+    news_url = "http://news.google.com/news/search/section/q/%s" % query
+    print(news_url)
+    return news_url
+    
 def application(env, start_response, classifier = None, serve_page = False, 
-        response_page = None, tweet_crawler = None):
+        response_page = None, tweet_api = None, ibm_api = None):
     print("env = ", env)
 
     # the JS uses POST, so if it isn't POST, either return default page or 403 status.
@@ -38,13 +63,10 @@ def application(env, start_response, classifier = None, serve_page = False,
     # Try to get tweet data from Twitter API using requested tweet id.
     try:
         post_data = env["wsgi.input"].read().decode("utf-8")
-        print(post_data)
         parsed = parse_qs(post_data)
-        print(parsed)
         tweet_id = parsed["tweet_id"][0]
-        print(tweet_id)
-        tweet_data = tweet_crawler.show_status(id = tweet_id)        
-        print(tweet_data)
+        tweet_data = tweet_api.show_status(id = tweet_id)        
+        print("tweet_data =", tweet_data)
     except TwythonError as err:
         print(err)
         if "429 (Too Many Requests)" in str(err):
@@ -59,7 +81,7 @@ def application(env, start_response, classifier = None, serve_page = False,
     response = '{"prediction": "%s"}' % prediction
     if not prediction == "none":
         # TODO: Generate URL from IBM NLU API
-        news_url = "http://news.google.com"
+        news_url = create_news_url(ibm_api, tweet_data["text"])
         response = '{"prediction": "%s", "news_url": "%s"}' % (prediction, news_url)
 
     print("\ntweet:\n", tweet_data)
@@ -72,22 +94,29 @@ def run_server():
     # Parse arguments.
     parser = argparse.ArgumentParser(description='Server for running Twitter hate speech detection.')
     parser.add_argument('-p', '--port-number', default=DEFAULT_PORT_NUMBER)
-    parser.add_argument('-k', '--app-key', required=True)
-    parser.add_argument('-t', '--app-secret', required=True)
     parser.add_argument('-s', '--serve-page', action='store_true', default=False)
+    parser.add_argument('--twitter-key', required=True)
+    parser.add_argument('--twitter-secret', required=True)
+    parser.add_argument('--ibm-username', required=True)
+    parser.add_argument('--ibm-password', required=True)
     args = parser.parse_args()
     
     port_number = int(args.port_number)
-    app_key = args.app_key
-    app_secret = args.app_secret
     serve_page = args.serve_page
+    twitter_key = args.twitter_key
+    twitter_secret = args.twitter_secret
+    ibm_username = args.ibm_username
+    ibm_password = args.ibm_password
     response_page = None
     
     # Load classifier.
     classifier = TwitterHateClassifier()
     
-    # Start Twython twitter crawler.
-    tweet_crawler = get_twitter_crawler(app_key, app_secret)
+    # Start Twython twitter api.
+    tweet_api = get_twitter_api(twitter_key, twitter_secret)
+    
+    # Start NaturalLanguageUnderstandingV1 IBM api.
+    ibm_api = get_ibm_api(twitter_key, twitter_secret)
     
     # Load interactive response page.
     if serve_page:
@@ -99,7 +128,7 @@ def run_server():
     # Start server
     host = socket.gethostbyname(socket.gethostname())
     address = host, port_number
-    app = functools.partial(application, classifier = classifier, serve_page = serve_page, response_page = response_page, tweet_crawler = tweet_crawler)
+    app = functools.partial(application, classifier = classifier, serve_page = serve_page, response_page = response_page, tweet_api = tweet_api, ibm_api = ibm_api)
     server = WSGIServer(address, app)
     server.backlog = 256
     print('\n########################################\n')

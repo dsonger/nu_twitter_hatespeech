@@ -18,13 +18,16 @@ Where TWEET_ID is a string of the tweet id, according to the tweet URL.
 * Numpy
 * Gevent
 * Twython
+* IBM Watson Developer Cloud
 
 ## How to run locally:
-Open the terminal and run the following command. Optional arguments in [].
+Open the terminal and run the following command.
 
 ```
-server.py [-p PORT_NUMBER] -k TWITTER_APP_KEY -t TWITTER_APP_SECRET [-s]
+server.py [-p PORT_NUMBER] [-s] --twitter-key TWITTER_APP_KEY --twitter-secret TWITTER_APP_SECRET --ibm-username IBM_APP_USERNAME --ibm-password IBM_APP_PASSWORD
 ```
+
+Note: Optional arguments in [] and argument values are in upper-case.
 
 ### Argument details:
 
@@ -32,13 +35,16 @@ server.py [-p PORT_NUMBER] -k TWITTER_APP_KEY -t TWITTER_APP_SECRET [-s]
 -p --port-number PORT_NUMBER :
 	Port number to be used, by default uses 8080
 
--s --serve-page : 
+-s --serve-page :
 	By default returns "403 Forbidden" on GET methods. 
 	If this is argument is set, will serve a simple html 
 	page to interact with server.
 	
--k --app_key TWITTER_APP_KEY:
+--twitter-key TWITTER_APP_KEY:
 
--t --app_secret TWITTER_APP_SECRET:
-	
+--twitter-secret TWITTER_APP_SECRET:
+
+--ibm-username IBM_APP_USERNAME:
+
+--ibm-password IBM_APP_PASSWORD:
 ```
