@@ -5,12 +5,12 @@
   "description": "Get notified when the Tweet you're viewing contains hate speech and gain exposure to a broader range of perspectives on controversial and newsworthy topics.",
   "version": "1.0",
    
-  "permissions": ["tabs", "*://*.twitter.com/*"],
+  "permissions": ["tabs", "*://*.twitter.com/*", "https://192.168.56.1:8080"],
   "content_scripts": [
     {
       "matches": ["*://*.twitter.com/*"],
 	  "css": ["styles.css"],
-      "js": ["content.js"]
+      "js": ["jquery.min.js", "content.js"]
     }
   ]
 }

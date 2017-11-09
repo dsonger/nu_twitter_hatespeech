@@ -6,6 +6,8 @@ import json
 
 from urllib.parse import parse_qs
 from gevent.pywsgi import WSGIServer
+from gevent import socket
+from gevent.ssl import SSLSocket, SSLError
 from lstm_classifier import TwitterHateClassifier
 from twython import Twython
 from twython.exceptions import TwythonError
@@ -129,10 +131,10 @@ def run_server():
     host = socket.gethostbyname(socket.gethostname())
     address = host, port_number
     app = functools.partial(application, classifier = classifier, serve_page = serve_page, response_page = response_page, tweet_api = tweet_api, ibm_api = ibm_api)
-    server = WSGIServer(address, app)
+    server = WSGIServer(address, app, keyfile='host.key', certfile='host.crt')
     server.backlog = 256
     print('\n########################################\n')
-    print('Serving on http://%s:%s' % (host, port_number))
+    print('Serving on https://%s:%s' % (host, port_number))
     print('Press ctrl-C or cmd-C to stop.')
     print('\n########################################\n')
     server.serve_forever()
