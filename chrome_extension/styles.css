@@ -15,6 +15,10 @@
 	border-top-right-radius: 4px;
 	border: solid #17a2b8 1px;
 }
+.hatespeech-extension-container .header-container img {
+	height: 40px;
+	vertical-align: middle;
+}
 .hatespeech-extension-container .header-icon-container {
 	position: absolute;
 	right: 15px;

@@ -4,13 +4,17 @@
   "name": "OPEN - Twitter Hate Speech Detector",
   "description": "Get notified when the Tweet you're viewing contains hate speech and gain exposure to a broader range of perspectives on controversial and newsworthy topics.",
   "version": "1.0",
+  "browser_action": {
+	  "default_icon": "open_logo.png"
+  },
+  "web_accessible_resources": ["open.png"],
    
   "permissions": ["tabs", "*://*.twitter.com/*", "https://192.168.56.1:8080", "http://192.168.56.1:8080"],
   "content_scripts": [
-    {
-      "matches": ["*://*.twitter.com/*"],
-	  "css": ["styles.css"],
-      "js": ["jquery.min.js", "content.js"]
-    }
+     {
+       "matches": ["*://*.twitter.com/*"],
+  	   "css": ["styles.css"],
+       "js": ["jquery.min.js", "content.js"]
+     }
   ]
 }
