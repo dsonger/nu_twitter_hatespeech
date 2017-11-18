@@ -23,8 +23,8 @@ def error_response(start_response, status_code):
     return [bytes('<h1>%s</h1>' % status_code, "utf-8")]
 
 def get_twitter_api(app_key, app_secret):
-    app_key = 'inAzbLHc9OGYy2TJAyzvv8kVy'
-    app_secret = 'XWv544eJo1IFdQZvNrEazM6tknDCJnsHxprlLsC1vEH3iKMEnX'
+    app_key = app_key
+    app_secret = app_secret
 
     twitter = Twython(app_key, app_secret, oauth_version=2)
     access_token = twitter.obtain_access_token()
@@ -32,8 +32,8 @@ def get_twitter_api(app_key, app_secret):
     
 def get_ibm_api(username, passsword):
     return NaturalLanguageUnderstandingV1(
-        username="002e5382-7ca8-45fd-9cf3-7d31cba37479",
-        password="2gNm8tNui0Kz",
+        username=username,
+        password=passsword,
         version="2017-02-27")
 
 def create_news_url(ibm_api, tweet_text):
@@ -48,7 +48,7 @@ def create_news_url(ibm_api, tweet_text):
     print(category_label)
     query = (" ".join(category_label.split("/")[1:])).replace(" ", "%20")
     print(query)
-    news_url = "http://news.google.com/news/search/section/q/%s" % query
+    news_url = "http://www.google.com/search?q=%s" % query
     print(news_url)
     return news_url
     
@@ -120,7 +120,7 @@ def run_server():
     tweet_api = get_twitter_api(twitter_key, twitter_secret)
     
     # Start NaturalLanguageUnderstandingV1 IBM api.
-    ibm_api = get_ibm_api(twitter_key, twitter_secret)
+    ibm_api = get_ibm_api(ibm_username, ibm_password)
     
     # Load interactive response page.
     if serve_page:

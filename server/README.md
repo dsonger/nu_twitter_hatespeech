@@ -41,10 +41,14 @@ Note: Optional arguments in [] and argument values are in upper-case.
 	page to interact with server.
 	
 --twitter-key TWITTER_APP_KEY:
-
+	The key credentials given by the Twitter app.
+	
 --twitter-secret TWITTER_APP_SECRET:
-
+	The secret credentials given by the Twitter app.
+	
 --ibm-username IBM_APP_USERNAME:
+	The username credentials used by IBM NLU API.
 
 --ibm-password IBM_APP_PASSWORD:
+	The password credentials used by IBM NLU API.
 ```
